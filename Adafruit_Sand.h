@@ -9,18 +9,18 @@
 // relatively smooth) without having to go all floating-point about it.
 // Positions are divided by 256 for pixel display and collision detection.
 
-#ifdef _AVR_
+#ifdef __AVR__
 // For better performance and RAM utilization on AVR microcontrollers,
 // display is limited to maximum 255x255 pixels and 255 grains of sand.
 // You can try overriding either or both here, RAM permitting.
-typedef uint8_t dimension_t;    // Pixel dimensions
-typedef unt16_t position_t;     // 'Sand space' coords (256X pixel space)
-typedef uint8_t grain_count_t;  // Number of grains
+typedef uint8_t  dimension_t;   // Pixel dimensions
+typedef uint16_t position_t;    // 'Sand space' coords (256X pixel space)
+typedef uint8_t  grain_count_t; // Number of grains
 #else
 // Anything non-AVR is presumed more capable, maybe a Cortex M0 or other
 // 32-bit device.  These go up to 65535x65535 pixels and 65535 grains.
 typedef uint16_t dimension_t;   // Pixel dimensions
-typedef uint32_t  position_t;   // 'Sand space' coords (256X pixel space)
+typedef uint32_t position_t;    // 'Sand space' coords (256X pixel space)
 typedef uint16_t grain_count_t; // Number of grains
 #endif
 // Velocity type is same on any architecture -- must allow up to +/- 256
@@ -32,8 +32,8 @@ typedef struct Grain {
   position_t  x,  y;
   velocity_t vx, vy;
 };
-// This is in addition to a 1-bit-per-pixel bitmap (width rounded up to
-// next multiple of 8), e.g. 20x20 pixels = 60 bytes (24x20/8).  You can
+// This is in addition to a 2-bit-per-pixel bitmap (width rounded up to
+// next multiple of 4), e.g. 20x20 pixels = 100 bytes ((20/4)*20).  You can
 // set obstacles in the bitmap using the setPixel() function, these are
 // independent of the sand grains and don't move.
 
@@ -43,15 +43,16 @@ class Adafruit_Sand {
     uint8_t e=128);
   ~Adafruit_Sand(void);
   bool begin(void),
-       readPixel(dimension_t x, dimension_t y) const,
        place(grain_count_t i, dimension_t x, dimension_t y);
-  void setPixel(dimension_t x, dimension_t y),
+  void setPixel(dimension_t x, dimension_t y, uint8_t n),
        clearPixel(dimension_t x, dimension_t y),
        randomize(void),
        iterate(int16_t ax, int16_t ay, int16_t az=0),
        clear(void);
+  uint8_t
+       readPixel(dimension_t x, dimension_t y) const;
  private:
-  dimension_t   width, height, w8;
+  dimension_t   width, height, w4;
   position_t    xMax, yMax;
   grain_count_t n_grains;
   uint8_t       scale, elasticity, *bitmap;

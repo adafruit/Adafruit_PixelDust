@@ -1,7 +1,7 @@
 #include <Adafruit_Sand.h>
 
 Adafruit_Sand::Adafruit_Sand(dimension_t w, dimension_t h, grain_count_t n,
- uint8_t s, uint8_t e) : width(w), height(h), w8((w + 7) / 8),
+ uint8_t s, uint8_t e) : width(w), height(h), w4((w + 3) / 4),
  xMax(w * 256 - 1), yMax(h * 256 - 1), n_grains(n), scale(s),
  elasticity(e), bitmap(NULL), grain(NULL) {
 }
@@ -19,7 +19,7 @@ Adafruit_Sand::~Adafruit_Sand(void) {
 
 bool Adafruit_Sand::begin(void) {
   if((bitmap)) return true; // Already allocated
-  if((bitmap = (uint8_t *)calloc(w8 * height, sizeof(uint8_t)))) {
+  if((bitmap = (uint8_t *)calloc(w4 * height, sizeof(uint8_t)))) {
     if((!n_grains) || (grain = (Grain *)calloc(n_grains, sizeof(Grain))))
       return true; // Success
     free(bitmap);  // Second alloc failed; free first-alloc data too
@@ -30,7 +30,7 @@ bool Adafruit_Sand::begin(void) {
 
 bool Adafruit_Sand::place(grain_count_t i, dimension_t x, dimension_t y) {
   if(readPixel(x, y)) return false; // Position already occupied
-  setPixel(x, y);
+  setPixel(x, y, 1);
   grain[i].x = x * 256;
   grain[i].y = y * 256;
   return true;
@@ -44,51 +44,37 @@ void Adafruit_Sand::randomize(void) {
   }
 }
 
-// Set/clear/read functions for the bitmap buffer
+// Pixel set/read functions for the bitmap buffer
 
+const uint8_t PROGMEM mask[]  = { 0x3F, 0xCF, 0xF3, 0xFC },
+                      mul[]   = { 0x40, 0x10, 0x04, 0x01 },
+                      shift[] = { 6, 4, 2, 0 };
+
+void Adafruit_Sand::setPixel(dimension_t x, dimension_t y, uint8_t n) {
 #ifdef __AVR__
-
-// 1<<n is a costly operation on AVR -- table usu. smaller & faster
-static const uint8_t PROGMEM
-  set[] = {  1,  2,  4,  8,  16,  32,  64,  128 },
-  clr[] = { (uint8_t)~1 , (uint8_t)~2 , (uint8_t)~4 , (uint8_t)~8,
-            (uint8_t)~16, (uint8_t)~32, (uint8_t)~64, (uint8_t)~128 };
-
-void Adafruit_Sand::setPixel(dimension_t x, dimension_t y) {
-  bitmap[y * w8 + x / 8] |= pgm_read_byte(&set[x & 7]);
-}
-
-void Adafruit_Sand::clearPixel(dimension_t x, dimension_t y) {
-  bitmap[y * w8 + x / 8] &= pgm_read_byte(&clr[x & 7]);
-}
-
-bool Adafruit_Sand::readPixel(dimension_t x, dimension_t y) const {
-  return bitmap[y * w8 + x / 8] & pgm_read_byte(&set[x & 7]);
-}
-
+  uint16_t bytenum;
 #else
+  uint32_t bytenum;
+#endif
+  bytenum = y * w4 + x / 4;
+  uint8_t x3 = x & 3;
 
-// M0 & other 32-bit devices typically have a single-cycle shift,
-// the AVR table approach isn't necessary there.
-
-void Adafruit_Sand::setPixel(dimension_t x, dimension_t y) {
-  bitmap[y * w8 + x / 8] |= 0x80 >> (x & 7);
+  bitmap[bytenum] = (bitmap[bytenum] & pgm_read_byte(&mask[x3])) |
+    ((n & 3) * pgm_read_byte(&mul[x3]));
 }
 
 void Adafruit_Sand::clearPixel(dimension_t x, dimension_t y) {
-  bitmap[y * w8 + x / 8] &= ~(0x80 >> (x & 7));
+  bitmap[y * w4 + x / 4] &= pgm_read_byte(&mask[x & 3]);
 }
 
-bool Adafruit_Sand::readPixel(dimension_t x, dimension_t y) const {
-  return bitmap[y * w8 + x / 8] & (0x80 >> (x & 7));
+uint8_t Adafruit_Sand::readPixel(dimension_t x, dimension_t y) const {
+  return (bitmap[y * w4 + x / 4] >> pgm_read_byte(&shift[x & 3])) & 3;
 }
-
-#endif // __AVR__
 
 // Clears bitmap buffer.  Grain positions are unchanged,
 // probably want to follow up with some place() calls.
 void Adafruit_Sand::clear(void) {
-  if(bitmap) memset(bitmap, 0, w8 * height);
+  if(bitmap) memset(bitmap, 0, w4 * height);
 }
 
 #define BOUNCE(n) n = (-n * elasticity / 256)
@@ -98,7 +84,7 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
 
   ax = (int32_t)ax * scale / 256;  // Scale down raw accelerometer
   ay = (int32_t)ay * scale / 256;  // inputs to manageable range.
-  az = (int32_t)az * scale / 1024; // Z is further scaled down 1:4
+  az = abs((int32_t)az * scale / 2048); // Z is further scaled down 1:8
   // A tiny bit of random motion is applied to each grain, so that tall
   // stacks of pixels tend to topple (else the whole stack slides across
   // the display).  This is a function of the Z axis input, so it's more
@@ -141,7 +127,7 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
   // calculations and volume of code quickly got out of hand for both the
   // tiny 8-bit AVR microcontroller and my tiny dinosaur brain.)
 
-#ifdef AVR
+#ifdef __AVR__
   int16_t  newx, newy;
   uint16_t oldidx, newidx, delta;
 #else
@@ -187,12 +173,12 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
         // (both-axis) motion is occurring, moving on either axis alone WILL
         // change the pixel index, no need to check that again.
         if(abs(grain[i].vx) >= abs(grain[i].vy)) { // X axis is faster
-          if(!readPixel(newx / 256, grain[i].y / 256)) {
+          if(!readPixel(newx / 256, grain[i].y / 256)) { // newx, oldy
             // That pixel's free!  Take it!  But...
             newy = grain[i].y;      // Cancel Y motion
             BOUNCE(grain[i].vy);    // and bounce Y velocity
           } else { // X pixel is taken, so try Y...
-            if(!readPixel(grain[i].x / 256, newy / 256)) {
+            if(!readPixel(grain[i].x / 256, newy / 256)) { // oldx, newy
               // Pixel is free, take it, but first...
               newx = grain[i].x;    // Cancel X motion
               BOUNCE(grain[i].vx);  // and bounce X velocity
@@ -204,15 +190,15 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
             }
           }
         } else { // Y axis is faster, start there
-          if(!readPixel(grain[i].x / 256, newy / 256)) {
+          if(!readPixel(grain[i].x / 256, newy / 256)) { // oldx, newy
             // Pixel's free!  Take it!  But...
             newx = grain[i].x;      // Cancel X motion
             BOUNCE(grain[i].vy);    // and bounce X velocity
           } else { // Y pixel is taken, so try X...
-            if(!readPixel(newx / 256, grain[i].y / 256)) {
+            if(!readPixel(newx / 256, grain[i].y / 256)) { // newx, oldy
               // Pixel is free, take it, but first...
               newy = grain[i].y;    // Cancel Y motion
-              BOUNCE(grain[i].vy);         // and bounce Y velocity
+              BOUNCE(grain[i].vy);  // and bounce Y velocity
             } else { // Both spots are occupied
               newx = grain[i].x;    // Cancel X & Y motion
               newy = grain[i].y;
@@ -226,7 +212,7 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
     clearPixel(grain[i].x / 256, grain[i].y / 256); // Clear old spot
     grain[i].x = newx;                              // Update grain position
     grain[i].y = newy;
-    setPixel(newx / 256, newy / 256);               // Set new spot
+    setPixel(newx / 256, newy / 256, 1);            // Set new spot
   }
 }
 
