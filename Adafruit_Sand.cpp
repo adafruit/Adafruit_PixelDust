@@ -98,7 +98,7 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
 
   ax = (int32_t)ax * scale / 256;  // Scale down raw accelerometer
   ay = (int32_t)ay * scale / 256;  // inputs to manageable range.
-  az = (int32_t)az * scale / 2048; // Z is further scaled down 1:8
+  az = (int32_t)az * scale / 1024; // Z is further scaled down 1:4
   // A tiny bit of random motion is applied to each grain, so that tall
   // stacks of pixels tend to topple (else the whole stack slides across
   // the display).  This is a function of the Z axis input, so it's more
@@ -141,28 +141,29 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
   // calculations and volume of code quickly got out of hand for both the
   // tiny 8-bit AVR microcontroller and my tiny dinosaur brain.)
 
-  position_t newx, newy;
 #ifdef AVR
-  uint16_t   oldidx, newidx, delta;
+  int16_t  newx, newy;
+  uint16_t oldidx, newidx, delta;
 #else
-  uint32_t   oldidx, newidx, delta;
+  int32_t  newx, newy;
+  uint32_t oldidx, newidx, delta;
 #endif
 
   for(i=0; i<n_grains; i++) {
     newx = grain[i].x + grain[i].vx; // New position in grain space
     newy = grain[i].y + grain[i].vy;
-    if(newx > xMax) {                // If grain would go out of bounds
-      newx = xMax;                   // keep it inside,
-      BOUNCE(grain[i].vx);           // and bounce off wall
-    } else if(newx < 0) {
-      newx = 0;
+    if(newx < 0) {         // If grain would go out of bounds
+      newx = 0;            // keep it inside,
+      BOUNCE(grain[i].vx); // and bounce off wall
+    } else if(newx > xMax) {
+      newx = xMax;
       BOUNCE(grain[i].vx);
     }
-    if(newy > yMax) {
-      newy = yMax;
-      BOUNCE(grain[i].vy);
-    } else if(newy < 0) {
+    if(newy < 0) {
       newy = 0;
+      BOUNCE(grain[i].vy);
+    } else if(newy > yMax) {
+      newy = yMax;
       BOUNCE(grain[i].vy);
     }
 
@@ -185,7 +186,7 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
         // faster axis).  Because we've already established that diagonal
         // (both-axis) motion is occurring, moving on either axis alone WILL
         // change the pixel index, no need to check that again.
-        if((abs(grain[i].vx) - abs(grain[i].vy)) >= 0) { // X axis is faster
+        if(abs(grain[i].vx) >= abs(grain[i].vy)) { // X axis is faster
           if(!readPixel(newx / 256, grain[i].y / 256)) {
             // That pixel's free!  Take it!  But...
             newy = grain[i].y;      // Cancel Y motion
