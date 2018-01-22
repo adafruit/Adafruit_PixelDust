@@ -85,6 +85,12 @@ bool Adafruit_Sand::readPixel(dimension_t x, dimension_t y) const {
 
 #endif // __AVR__
 
+// Clears bitmap buffer.  Grain positions are unchanged,
+// probably want to follow up with some place() calls.
+void Adafruit_Sand::clear(void) {
+  if(bitmap) memset(bitmap, 0, w8 * height);
+}
+
 #define BOUNCE(n) n = (-n * elasticity / 256)
 
 // Calculate one frame of sand interactions

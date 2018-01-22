@@ -44,7 +44,8 @@ class Adafruit_Sand {
   void setPixel(dimension_t x, dimension_t y),
        clearPixel(dimension_t x, dimension_t y),
        randomize(void),
-       iterate(int16_t ax, int16_t ay, int16_t az=0);
+       iterate(int16_t ax, int16_t ay, int16_t az=0),
+       clear(void);
  private:
   dimension_t   width, height, w8;
   position_t    xMax, yMax;
