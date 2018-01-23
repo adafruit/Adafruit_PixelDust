@@ -1,3 +1,31 @@
+/*!
+ * @file Adafruit_Sand.cpp
+ *
+ * @mainpage Particle simulation for "LED sand."
+ *
+ * @section intro_sec Introduction
+ *
+ * This handles the "physics engine" part of a sand/rain simulation.
+ * The term "physics" is used loosely here...it's a relatively crude
+ * algorithm that's appealing to the eye but takes many shortcuts with
+ * collision detection, etc.
+ *
+ * @section dependencies Dependencies
+ *
+ * Not dependent on other libraries for compilation. HOWEVER, this code
+ * does not actually render anything itself and needs to be used in
+ * conjunction with a display-specific library to handle graphics.
+ *
+ * @section author Author
+ *
+ * Written by Phil "PaintYourDragon" Burgess for Adafruit Industries.
+ *
+ * @section license License
+ *
+ * BSD license, all text here must be included in any redistribution.
+ *
+ */
+
 #include <Adafruit_Sand.h>
 
 Adafruit_Sand::Adafruit_Sand(dimension_t w, dimension_t h, grain_count_t n,
@@ -46,9 +74,9 @@ void Adafruit_Sand::randomize(void) {
 
 // Pixel set/read functions for the bitmap buffer
 
-const uint8_t PROGMEM mask[]  = { 0x3F, 0xCF, 0xF3, 0xFC },
-                      mul[]   = { 0x40, 0x10, 0x04, 0x01 },
-                      shift[] = {    6,    4,    2,    0 };
+static const uint8_t PROGMEM mask[]  = { 0x3F, 0xCF, 0xF3, 0xFC },
+                             mul[]   = { 0x40, 0x10, 0x04, 0x01 },
+                             shift[] = {    6,    4,    2,    0 };
 
 void Adafruit_Sand::setPixel(dimension_t x, dimension_t y, uint8_t n) {
 #ifdef __AVR__
@@ -77,7 +105,7 @@ void Adafruit_Sand::clear(void) {
   if(bitmap) memset(bitmap, 0, w4 * height);
 }
 
-#define BOUNCE(n) n = ((-n) * elasticity / 256)
+#define BOUNCE(n) n = ((-n) * elasticity / 256) ///< 1-axis elastic bounce
 
 // Calculate one frame of sand interactions
 void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
