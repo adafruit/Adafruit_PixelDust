@@ -12,11 +12,11 @@ env:
 # Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
 #    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
 
-before_install:
-   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+#before_install:
+#   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 
-install:
-   - arduino --install-library "Adafruit LIS3DH","Adafruit Unified Sensor"
+#install:
+#   - arduino --install-library "Adafruit LIS3DH","Adafruit Unified Sensor"
 
 script:
    - true
