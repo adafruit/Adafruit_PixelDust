@@ -16,7 +16,7 @@ before_install:
    - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 
 install:
-   - arduino --install-library "Adafruit LIS3DH"
+   - arduino --install-library "Adafruit LIS3DH","Adafruit Unified Sensor"
 
 script:
    - build_main_platforms
