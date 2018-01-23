@@ -19,7 +19,8 @@ install:
    - arduino --install-library "Adafruit LIS3DH","Adafruit Unified Sensor"
 
 script:
-   - build_main_platforms
+   - true
+   #- build_main_platforms
 
 # Generate and deploy documentation
 after_success:
