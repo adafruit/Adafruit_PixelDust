@@ -48,7 +48,7 @@ void Adafruit_Sand::randomize(void) {
 
 const uint8_t PROGMEM mask[]  = { 0x3F, 0xCF, 0xF3, 0xFC },
                       mul[]   = { 0x40, 0x10, 0x04, 0x01 },
-                      shift[] = { 6, 4, 2, 0 };
+                      shift[] = {    6,    4,    2,    0 };
 
 void Adafruit_Sand::setPixel(dimension_t x, dimension_t y, uint8_t n) {
 #ifdef __AVR__
@@ -77,7 +77,7 @@ void Adafruit_Sand::clear(void) {
   if(bitmap) memset(bitmap, 0, w4 * height);
 }
 
-#define BOUNCE(n) n = (-n * elasticity / 256)
+#define BOUNCE(n) n = ((-n) * elasticity / 256)
 
 // Calculate one frame of sand interactions
 void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
@@ -124,15 +124,14 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
   // visually integrates into something that somewhat resembles physics.
   // (I'd initially tried implementing this as a bunch of concurrent and
   // "realistic" elastic collisions among circular grains, but the
-  // calculations and volume of code quickly got out of hand for both the
-  // tiny 8-bit AVR microcontroller and my tiny dinosaur brain.)
+  // calculations and volume of code quickly got out of hand for both
+  // the tiny 8-bit AVR microcontroller and my tiny dinosaur brain.)
 
+  position_t newx, newy;
 #ifdef __AVR__
-  int16_t  newx, newy;
-  uint16_t oldidx, newidx, delta;
+  int16_t oldidx, newidx, delta;
 #else
-  int32_t  newx, newy;
-  uint32_t oldidx, newidx, delta;
+  int32_t oldidx, newidx, delta;
 #endif
 
   for(i=0; i<n_grains; i++) {
@@ -168,10 +167,8 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
         newy = grain[i].y;          // Cancel Y motion
         BOUNCE(grain[i].vy);        // and bounce Y velocity (X is OK)
       } else { // Diagonal intersection is more tricky...
-        // Try skidding along just one axis of motion if possible (start w/
-        // faster axis).  Because we've already established that diagonal
-        // (both-axis) motion is occurring, moving on either axis alone WILL
-        // change the pixel index, no need to check that again.
+        // Try skidding along just one axis of motion if possible
+        // (start w/faster axis).
         if(abs(grain[i].vx) >= abs(grain[i].vy)) { // X axis is faster
           if(!readPixel(newx / 256, grain[i].y / 256)) { // newx, oldy
             // That pixel's free!  Take it!  But...
@@ -193,7 +190,7 @@ void Adafruit_Sand::iterate(int16_t ax, int16_t ay, int16_t az) {
           if(!readPixel(grain[i].x / 256, newy / 256)) { // oldx, newy
             // Pixel's free!  Take it!  But...
             newx = grain[i].x;      // Cancel X motion
-            BOUNCE(grain[i].vy);    // and bounce X velocity
+            BOUNCE(grain[i].vx);    // and bounce X velocity
           } else { // Y pixel is taken, so try X...
             if(!readPixel(newx / 256, grain[i].y / 256)) { // newx, oldy
               // Pixel is free, take it, but first...

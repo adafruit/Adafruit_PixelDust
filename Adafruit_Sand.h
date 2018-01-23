@@ -11,16 +11,16 @@
 
 #ifdef __AVR__
 // For better performance and RAM utilization on AVR microcontrollers,
-// display is limited to maximum 255x255 pixels and 255 grains of sand.
+// display is limited to maximum 127x127 pixels and 255 grains of sand.
 // You can try overriding either or both here, RAM permitting.
-typedef uint8_t  dimension_t;   // Pixel dimensions
-typedef uint16_t position_t;    // 'Sand space' coords (256X pixel space)
-typedef uint8_t  grain_count_t; // Number of grains
+typedef uint8_t dimension_t;    // Pixel dimensions
+typedef int16_t position_t;     // 'Sand space' coords (256X pixel space)
+typedef uint8_t grain_count_t;  // Number of grains
 #else
 // Anything non-AVR is presumed more capable, maybe a Cortex M0 or other
-// 32-bit device.  These go up to 65535x65535 pixels and 65535 grains.
+// 32-bit device.  These go up to 32767x32767 pixels and 65535 grains.
 typedef uint16_t dimension_t;   // Pixel dimensions
-typedef uint32_t position_t;    // 'Sand space' coords (256X pixel space)
+typedef int32_t  position_t;    // 'Sand space' coords (256X pixel space)
 typedef uint16_t grain_count_t; // Number of grains
 #endif
 // Velocity type is same on any architecture -- must allow up to +/- 256
