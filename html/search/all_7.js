@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['randomize',['randomize',['../class_adafruit___sand.html#ab979ddcb4d6d2cb4d07b4cc22bf7d16b',1,'Adafruit_Sand']]],
-  ['readpixel',['readPixel',['../class_adafruit___sand.html#a84951843443b1604abc59c970df45916',1,'Adafruit_Sand']]]
+  ['randomize',['randomize',['../class_adafruit___pixel_dust.html#ae41df4a1f39762f2a27bd2b99af50071',1,'Adafruit_PixelDust']]]
 ];

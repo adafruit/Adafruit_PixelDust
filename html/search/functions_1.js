@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['begin',['begin',['../class_adafruit___sand.html#a1165ce5d355ab6997c56c0f8c550c4d2',1,'Adafruit_Sand']]]
+  ['begin',['begin',['../class_adafruit___pixel_dust.html#a64aa45eba57bd35b9544ecec4c7dd91a',1,'Adafruit_PixelDust']]]
 ];

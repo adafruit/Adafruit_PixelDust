@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['adafruit_5fsand',['Adafruit_Sand',['../class_adafruit___sand.html',1,'']]]
+  ['adafruit_5fpixeldust',['Adafruit_PixelDust',['../class_adafruit___pixel_dust.html',1,'']]]
 ];
