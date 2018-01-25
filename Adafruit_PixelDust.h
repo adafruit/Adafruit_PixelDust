@@ -1,8 +1,8 @@
 /*!
- * @file Adafruit_Sand.h
+ * @file Adafruit_PixelDust.h
  *
- * Header file to accompany Adafruit_Sand.cpp -- particle simulation
- * for "LED sand."
+ * Header file to accompany Adafruit_PixelDust.cpp -- particle simulation
+ * for "LED sand" (or dust, or snow or rain or whatever).
  *
  * Adafruit invests time and resources providing this open source code,
  * please support Adafruit and open-source hardware by purchasing
@@ -14,8 +14,8 @@
  *
  */
 
-#ifndef _ADAFRUIT_SAND_H_
-#define _ADAFRUIT_SAND_H_
+#ifndef _ADAFRUIT_PIXELDUST_H_
+#define _ADAFRUIT_PIXELDUST_H_
 
 #include <Arduino.h>
 
@@ -51,10 +51,10 @@ typedef int16_t  velocity_t;    ///< Velocity type
     that's appealing to the eye but takes many shortcuts with collision
     detection, etc.
 */
-class Adafruit_Sand {
+class Adafruit_PixelDust {
  public:
   /*!
-      @brief Constructor -- allocates the basic Adafruit_Sand object,
+      @brief Constructor -- allocates the basic Adafruit_PixelDust object,
              this should be followed with a call to begin() to allocate
              additional data structures within.
       @param w Simulation width in pixels (up to 127 on AVR,
@@ -69,16 +69,17 @@ class Adafruit_Sand {
                This determines the sand grains' "bounce" -- higher numbers
                yield bouncier particles.
   */
-  Adafruit_Sand(dimension_t w, dimension_t h, grain_count_t n, uint8_t s,
+  Adafruit_PixelDust(dimension_t w, dimension_t h, grain_count_t n, uint8_t s,
     uint8_t e=128);
   /*!
       @brief Destructor -- deallocates memory associated with the
-             Adafruit_Sand object.
+             Adafruit_PixelDust object.
   */
-  ~Adafruit_Sand(void);
+  ~Adafruit_PixelDust(void);
        /*!
-           @brief  Allocates additional memory required by the Adafruit_Sand
-                   object before placing elements or calling iterate().
+           @brief  Allocates additional memory required by the
+                   Adafruit_PixelDust object before placing elements or
+                   calling iterate().
            @return True on success (memory allocated), otherwise false.
        */
   bool begin(void),
@@ -90,25 +91,29 @@ class Adafruit_Sand {
            @return True on success (grain placed), otherwise false
                    (position already occupied)
        */
-       place(grain_count_t i, dimension_t x, dimension_t y);
+       setPosition(grain_count_t i, dimension_t x, dimension_t y),
+       /*!
+           @brief  Get value of one pixel on the pixel grid.
+           @param  x Horizontal (x) coordinate (0 to width-1).
+           @param  y Vertical (y) coordinate (0 to height-1).
+           @return true if spot occupied by a grain or obstacle,
+                   otherwise false.
+       */
+       getPixel(dimension_t x, dimension_t y) const;
        /*!
            @brief Sets state of one pixel on the pixel grid. This can be
                   used for drawing obstacles for sand to fall around.
                   Call this function BEFORE placing any sand grains with
-                  the place() or randomize() functions.
+                  the place() or randomize() functions.  Setting a pixel
+                  does NOT place a sand grain there, only marks that
+                  location as an obstacle.
            @param x Horizontal (x) coordinate (0 to width-1).
            @param y Vertical(y) coordinate (0 to height-1).
-           @param n Value: 0=empty, 1=sand grain, 2,3=obstacle. Assigning
-                           a pixel a value of '1' does NOT actually place
-                           a sand grain there, only sets that location on
-                           the grid to a sand-colored value. Use the
-                           place() or randomize() functions to position
                            sand grains in the simulation.
        */
-  void setPixel(dimension_t x, dimension_t y, uint8_t n),
+  void setPixel(dimension_t x, dimension_t y),
        /*!
-           @brief Clear one pixel on the pixel grid (set to 0). This is
-                  equivalent to setPixel(x, y, 0), but slightly faster.
+           @brief Clear one pixel on the pixel grid (set to 0).
            @param x Horizontal (x) coordinate (0 to width-1).
            @param y Vertical (y) coordinate (0 to height-1).
        */
@@ -124,6 +129,13 @@ class Adafruit_Sand {
        */
        randomize(void),
        /*!
+           @brief  Get Position of one sand grain on the pixel grid.
+           @param  i Grain index (0 to grains-1).
+           @param  x POINTER to store horizontal (x) coord (0 to width-1).
+           @param  y POINTER to store vertical (y) coord (0 to height-1).
+       */
+       getPosition(grain_count_t i, dimension_t *x, dimension_t *y) const,
+       /*!
            @brief Run one iteration (frame) of the particle simulation.
            @param ax Accelerometer X input.
            @param ay Accelerometer Y input.
@@ -134,22 +146,10 @@ class Adafruit_Sand {
            @brief Clear the pixel grid contents.
        */
        clear(void);
-  uint8_t
-       /*!
-           @brief  Get value of one pixel on the pixel grid. Applications
-                   that handle device-specific graphics will want to call
-                   this function for each pixel of the display. The return
-                   value can be used as a color palette index for drawing
-                   to a screen.
-           @param  x Horizontal (x) coordinate (0 to width-1).
-           @param  y Vertical (y) coordinate (0 to height-1).
-           @return 0=empty, 1=sand grain, 2-3=obstacle.
-       */
-       readPixel(dimension_t x, dimension_t y) const;
  private:
   dimension_t   width,      // Width in pixels
                 height,     // Height in pixels
-                w4;         // Bitmap scanline bytes ((width + 3) / 4)
+                w8;         // Bitmap scanline bytes ((width + 7) / 8)
   position_t    xMax,       // Max X coordinate in grain space
                 yMax;       // Max Y coordinate in grain space
   grain_count_t n_grains;   // Number of sand grains
@@ -162,5 +162,5 @@ class Adafruit_Sand {
   } *grain;
 };
 
-#endif // _ADAFRUIT_SAND_H_
+#endif // _ADAFRUIT_PIXELDUST_H_
 

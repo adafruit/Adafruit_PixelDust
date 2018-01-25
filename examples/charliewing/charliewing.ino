@@ -12,9 +12,9 @@
 // provide functions for drawing pixels, lines, etc.
 //--------------------------------------------------------------------------
 
-#include <Wire.h>            // For I2C communication
-#include <Adafruit_LIS3DH.h> // For accelerometer
-#include <Adafruit_Sand.h>
+#include <Wire.h>               // For I2C communication
+#include <Adafruit_LIS3DH.h>    // For accelerometer
+#include <Adafruit_PixelDust.h> // For simulation
 
 #define DISP_ADDR  0x74 // Charlieplex FeatherWing I2C address
 #define ACCEL_ADDR 0x18 // Accelerometer I2C address
@@ -24,7 +24,11 @@
 #define MAX_FPS      45 // Maximum redraw rate, frames/second
 
 // Sand object, last 2 args are accelerometer scaling and grain elasticity
-Adafruit_Sand sand(WIDTH, HEIGHT, N_GRAINS, 1, 128);
+Adafruit_PixelDust sand(WIDTH, HEIGHT, N_GRAINS, 1, 128);
+
+// Since we're not using the GFX library, it's necessary to buffer the
+// display contents ourselves (8 bits/pixel with the Charlieplex drivers).
+uint8_t pixelBuf[WIDTH * HEIGHT];
 
 Adafruit_LIS3DH accel      = Adafruit_LIS3DH();
 uint32_t        prevTime   = 0;      // Used for frames-per-second throttle
@@ -40,7 +44,7 @@ const uint8_t PROGMEM remap[] = {    // In order to redraw the screen super
    0, 93, 78, 63, 48, 33, 18,  3,    // Featherwing is strange! This table
       12, 27, 42, 57, 72, 87,102, 0, // remaps LED register indices in
    0, 94, 79, 64, 49, 34, 19,  4,    // sequence to the corresponding pixel
-      11, 26, 41, 56, 71, 86,101, 0, // indices in the sand bitmap.
+      11, 26, 41, 56, 71, 86,101, 0, // indices in pixelBuf[].
    0, 95, 80, 65, 50, 35, 20,  5,
       10, 25, 40, 55, 70, 85,100, 0,
    0, 96, 81, 66, 51, 36, 21,  6,
@@ -101,10 +105,13 @@ void setup(void) {
     if(bytes) Wire.endTransmission();      // Write any data left in buffer
   }
 
+  memset(pixelBuf, 0, sizeof(pixelBuf));   // Clear pixel buffer
+
   // Draw an obstacle for sand to move around
   for(uint8_t y=0; y<3; y++) {
     for(uint8_t x=0; x<3; x++) {
-      sand.setPixel(6+x, 2+y, 2);
+      sand.setPixel(6+x, 2+y);             // Set pixel in the simulation
+      pixelBuf[(2+y) * WIDTH + 6+x] = 5;   // Set pixel in pixelBuf[]
     }
   }
 
@@ -133,20 +140,32 @@ void loop() {
   Wire.endTransmission();
   backbuffer = 1 - backbuffer; // Swap front/back buffer index
 
+  // Erase old grain positions in pixelBuf[]
+  uint8_t     i;
+  dimension_t x, y;
+  for(i=0; i<N_GRAINS; i++) {
+    sand.getPosition(i, &x, &y);
+    pixelBuf[y * WIDTH + x] = 0;
+  }
+
   // Read accelerometer...
   accel.read();
+  // Run one frame of the simulation
   // X & Y axes are flipped around here to match physical mounting
   sand.iterate(-accel.y, accel.x, accel.z);
 
+  // Draw new grain positions in pixelBuf[]
+  for(i=0; i<N_GRAINS; i++) {
+    sand.getPosition(i, &x, &y);
+    pixelBuf[y * WIDTH + x] = 80;
+  }
+
   // Update pixel data in LED driver
-  uint8_t i, bytes, idx, x, y, *ptr = (uint8_t *)remap;
+  uint8_t bytes, *ptr = (uint8_t *)remap;
   pageSelect(backbuffer); // Select background buffer
   for(i=bytes=0; i<sizeof(remap); i++) {
     if(!bytes) bytes = writeRegister(0x24 + i);
-    idx = pgm_read_byte(ptr++);
-    y   = idx / WIDTH;
-    x   = idx - (y * WIDTH); // idx % WIDTH, basically
-    Wire.write(pgm_read_byte(&color[sand.readPixel(x, y)]));
+    Wire.write(pixelBuf[pgm_read_byte(ptr++)]);
     if(++bytes >= 32) bytes = Wire.endTransmission();
   }
   if(bytes) Wire.endTransmission();
