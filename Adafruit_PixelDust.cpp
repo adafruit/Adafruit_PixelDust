@@ -26,7 +26,7 @@
  *
  */
 
-#include <Adafruit_PixelDust.h>
+#include "Adafruit_PixelDust.h"
 
 Adafruit_PixelDust::Adafruit_PixelDust(dimension_t w, dimension_t h,
  grain_count_t n, uint8_t s, uint8_t e) : width(w), height(h),

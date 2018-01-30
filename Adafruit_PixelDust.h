@@ -17,7 +17,15 @@
 #ifndef _ADAFRUIT_PIXELDUST_H_
 #define _ADAFRUIT_PIXELDUST_H_
 
-#include <Arduino.h>
+#ifdef ARDUINO
+ #include <Arduino.h>
+#else
+ #include <stdlib.h>
+ #include <stdint.h>
+ #include <string.h>
+ #include <math.h>
+ #define random(X) (random() % X)
+#endif
 
 // The internal representation of sand grains places them in an integer
 // coordinate space that's 256X the scale of the pixel grid, allowing them
