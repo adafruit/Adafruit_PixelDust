@@ -57,8 +57,10 @@ typedef int16_t  velocity_t;    ///< Velocity type
     one per grain.  8 bytes each on AVR, 12 bytes elsewhere.
 */
 typedef struct {
-  position_t  x,  y; ///< Position in 'sand space'
-  velocity_t vx, vy; ///< Velocity (-255 to +255) in 'sand space'
+  position_t  x; ///< Horizontal position in 'sand space'
+  position_t  y; ///< Vertical position in 'sand space'
+  velocity_t vx; ///< Horizontal velocity (-255 to +255) in 'sand space'
+  velocity_t vy; ///< Vertical velocity (-255 to +255) in 'sand space'
 } Grain;
 
 /*!
