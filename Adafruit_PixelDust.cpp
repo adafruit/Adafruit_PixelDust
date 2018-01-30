@@ -29,9 +29,9 @@
 #include "Adafruit_PixelDust.h"
 
 Adafruit_PixelDust::Adafruit_PixelDust(dimension_t w, dimension_t h,
- grain_count_t n, uint8_t s, uint8_t e) : width(w), height(h),
+ grain_count_t n, uint8_t s, uint8_t e, bool sort) : width(w), height(h),
  w8((w + 7) / 8), xMax(w * 256 - 1), yMax(h * 256 - 1), n_grains(n),
- scale(s), elasticity(e), bitmap(NULL), grain(NULL) {
+ scale(s), elasticity(e), bitmap(NULL), grain(NULL), sort(sort) {
 }
 
 Adafruit_PixelDust::~Adafruit_PixelDust(void) {
@@ -127,6 +127,40 @@ void Adafruit_PixelDust::clear(void) {
 
 #define BOUNCE(n) n = ((-n) * elasticity / 256) ///< 1-axis elastic bounce
 
+// Comparison functions for qsort().  Rather than using true position along
+// acceleration vector (which would be computationally expensive), an 8-way
+// approximation is 'good enough' and quick to compute.  A separate optimized
+// function is provided for each of the 8 directions.
+
+static int compare0(const void *a, const void *b) {
+  return ((Grain *)b)->x - ((Grain *)a)->x;
+}
+static int compare1(const void *a, const void *b) {
+  return ((Grain *)b)->x + ((Grain *)b)->y - ((Grain *)a)->x - ((Grain *)a)->y;
+}
+static int compare2(const void *a, const void *b) {
+  return ((Grain *)b)->y - ((Grain *)a)->y;
+}
+static int compare3(const void *a, const void *b) {
+  return ((Grain *)a)->x - ((Grain *)a)->y - ((Grain *)b)->x + ((Grain *)b)->y;
+}
+static int compare4(const void *a, const void *b) {
+  return ((Grain *)a)->x - ((Grain *)b)->x;
+}
+static int compare5(const void *a, const void *b) {
+  return ((Grain *)a)->x + ((Grain *)a)->y - ((Grain *)b)->x - ((Grain *)b)->y;
+}
+static int compare6(const void *a, const void *b) {
+  return ((Grain *)a)->y - ((Grain *)b)->y;
+}
+static int compare7(const void *a, const void *b) {
+  return ((Grain *)b)->x - ((Grain *)b)->y - ((Grain *)a)->x + ((Grain *)a)->y;
+}
+static int (*compare[8])(const void *a, const void *b) = {
+  compare0, compare1, compare2, compare3,
+  compare4, compare5, compare6, compare7
+};
+
 // Calculate one frame of particle interactions
 void Adafruit_PixelDust::iterate(int16_t ax, int16_t ay, int16_t az) {
 
@@ -144,6 +178,16 @@ void Adafruit_PixelDust::iterate(int16_t ax, int16_t ay, int16_t az) {
   int16_t az2 = az * 2 + 1;     // max random motion to add back in
 
   grain_count_t i;
+
+  if(sort) {
+    int8_t q;
+    q = (int)(atan2(ay, ax) * 8.0 / M_PI); // -8 to +8
+    if(q >= 0) q = (q +  1) / 2;
+    else       q = (q + 16) / 2;
+    if(q > 7) q = 7;
+    // Sort grains by position, bottom-to-top
+    qsort(grain, n_grains, sizeof(Grain), compare[q]);
+  }
 
   // Apply 2D accel vector to grain velocities...
   int32_t v2; // Velocity squared

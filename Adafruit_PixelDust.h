@@ -51,6 +51,11 @@ typedef uint16_t grain_count_t; ///< Number of grains
 // Velocity type is same on any architecture -- must allow up to +/- 256
 typedef int16_t  velocity_t;    ///< Velocity type
 
+typedef struct {     // An array of these structures is allocated in
+  position_t  x,  y; // the begin() function, one per grain.  8 bytes
+  velocity_t vx, vy; // each on AVR, 12 bytes elsewhere.
+} Grain;
+
 /*!
     @brief Particle simulation class for "LED sand."
     This handles the "physics engine" part of a sand/rain simulation.
@@ -67,20 +72,26 @@ class Adafruit_PixelDust {
       @brief Constructor -- allocates the basic Adafruit_PixelDust object,
              this should be followed with a call to begin() to allocate
              additional data structures within.
-      @param w Simulation width in pixels (up to 127 on AVR,
-               32767 on other architectures).
-      @param h Simulation height in pixels (same).
-      @param n Number of sand grains (up to 255 on AVR, 65535 elsewhere).
-      @param s Accelerometer scaling (1-255). The accelerometer X, Y and Z
-               values passed to the iterate() function will be multiplied
-               by this value and then divided by 256, e.g. pass 1 to divide
-               accelerometer input by 256, 128 to divide by 2.
-      @param e Particle elasticity (0-255) (optional, default is 128).
-               This determines the sand grains' "bounce" -- higher numbers
-               yield bouncier particles.
+      @param w    Simulation width in pixels (up to 127 on AVR,
+                  32767 on other architectures).
+      @param h    Simulation height in pixels (same).
+      @param n    Number of sand grains (up to 255 on AVR, 65535 elsewhere).
+      @param s    Accelerometer scaling (1-255). The accelerometer X, Y and Z
+                  values passed to the iterate() function will be multiplied
+                  by this value and then divided by 256, e.g. pass 1 to
+                  divide accelerometer input by 256, 128 to divide by 2.
+      @param e    Particle elasticity (0-255) (optional, default is 128).
+                  This determines the sand grains' "bounce" -- higher numbers
+                  yield bouncier particles.
+      @param sort If true, particles are sorted bottom-to-top when iterating.
+                  Sorting sometimes (not always) makes the physics less
+                  "Looney Tunes," as lower particles get out of the way of
+                  upper particles.  It can be computationally expensive if
+                  there's lots of grains, and isn't good if you're coloring
+                  grains by index (because they're constantly reordering).
   */
   Adafruit_PixelDust(dimension_t w, dimension_t h, grain_count_t n, uint8_t s,
-    uint8_t e=128);
+    uint8_t e=128, bool sort=false);
 
   /*!
       @brief Destructor -- deallocates memory associated with the
@@ -177,10 +188,8 @@ class Adafruit_PixelDust {
   uint8_t       scale,      // Accelerometer input scaling = scale/256
                 elasticity, // Grain elasticity (bounce) = elasticity/256
                *bitmap;     // 2-bit-per-pixel bitmap (width padded to byte)
-  struct Grain {            // An array of these structures is allocated in
-    position_t  x,  y;      // the begin() function, one per grain.  8 bytes
-    velocity_t vx, vy;      // each on AVR, 12 bytes elsewhere.
-  } *grain;
+  Grain        *grain;      // One per grain, alloc'd in begin()
+  bool          sort;       // If true, sort bottom-to-top when iterating
 };
 
 #endif // _ADAFRUIT_PIXELDUST_H_
