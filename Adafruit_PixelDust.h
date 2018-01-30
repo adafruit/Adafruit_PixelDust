@@ -24,6 +24,7 @@
  #include <stdint.h>
  #include <string.h>
  #include <math.h>
+ /*! Remap Arduino-style random() to stdlib-style. */
  #define random(X) (random() % X)
 #endif
 
@@ -61,6 +62,7 @@ typedef int16_t  velocity_t;    ///< Velocity type
 */
 class Adafruit_PixelDust {
  public:
+
   /*!
       @brief Constructor -- allocates the basic Adafruit_PixelDust object,
              this should be followed with a call to begin() to allocate
@@ -79,81 +81,92 @@ class Adafruit_PixelDust {
   */
   Adafruit_PixelDust(dimension_t w, dimension_t h, grain_count_t n, uint8_t s,
     uint8_t e=128);
+
   /*!
       @brief Destructor -- deallocates memory associated with the
              Adafruit_PixelDust object.
   */
   ~Adafruit_PixelDust(void);
-       /*!
-           @brief  Allocates additional memory required by the
-                   Adafruit_PixelDust object before placing elements or
-                   calling iterate().
-           @return True on success (memory allocated), otherwise false.
-       */
-  bool begin(void),
-       /*!
-           @brief  Position one sand grain on the pixel grid.
-           @param  i Grain index (0 to grains-1).
-           @param  x Horizontal (x) coordinate (0 to width-1).
-           @param  y Vertical (y) coordinate (0 to height-1).
-           @return True on success (grain placed), otherwise false
-                   (position already occupied)
-       */
-       setPosition(grain_count_t i, dimension_t x, dimension_t y),
-       /*!
-           @brief  Get value of one pixel on the pixel grid.
-           @param  x Horizontal (x) coordinate (0 to width-1).
-           @param  y Vertical (y) coordinate (0 to height-1).
-           @return true if spot occupied by a grain or obstacle,
-                   otherwise false.
-       */
-       getPixel(dimension_t x, dimension_t y) const;
-       /*!
-           @brief Sets state of one pixel on the pixel grid. This can be
-                  used for drawing obstacles for sand to fall around.
-                  Call this function BEFORE placing any sand grains with
-                  the place() or randomize() functions.  Setting a pixel
-                  does NOT place a sand grain there, only marks that
-                  location as an obstacle.
-           @param x Horizontal (x) coordinate (0 to width-1).
-           @param y Vertical(y) coordinate (0 to height-1).
-                           sand grains in the simulation.
-       */
-  void setPixel(dimension_t x, dimension_t y),
-       /*!
-           @brief Clear one pixel on the pixel grid (set to 0).
-           @param x Horizontal (x) coordinate (0 to width-1).
-           @param y Vertical (y) coordinate (0 to height-1).
-       */
-       clearPixel(dimension_t x, dimension_t y),
-       /*!
-           @brief Randomize grain coordinates. This assigns random starting
-                  locations to every grain in the simulation, making sure
-                  they do not overlap or occupy obstacle pixels placed with
-                  the setPixel() function. The pixel grid should first be
-                  cleared with the begin() or clear() functions and any
-                  obstacles then placed with setPixel(); don't randomize()
-                  on an already-active field.
-       */
-       randomize(void),
-       /*!
-           @brief  Get Position of one sand grain on the pixel grid.
-           @param  i Grain index (0 to grains-1).
-           @param  x POINTER to store horizontal (x) coord (0 to width-1).
-           @param  y POINTER to store vertical (y) coord (0 to height-1).
-       */
-       getPosition(grain_count_t i, dimension_t *x, dimension_t *y) const,
-       /*!
-           @brief Run one iteration (frame) of the particle simulation.
-           @param ax Accelerometer X input.
-           @param ay Accelerometer Y input.
-           @param az Accelerometer Z input (optional, default is 0).
-       */
-       iterate(int16_t ax, int16_t ay, int16_t az=0),
-       /*!
-           @brief Clear the pixel grid contents.
-       */
-       clear(void);
+
+  /*!
+      @brief  Allocates additional memory required by the
+              Adafruit_PixelDust object before placing elements or
+              calling iterate().
+      @return True on success (memory allocated), otherwise false.
+  */
+  bool begin(void);
+
+  /*!
+      @brief Sets state of one pixel on the pixel grid. This can be
+             used for drawing obstacles for sand to fall around.
+             Call this function BEFORE placing any sand grains with
+             the place() or randomize() functions.  Setting a pixel
+             does NOT place a sand grain there, only marks that
+             location as an obstacle.
+      @param x Horizontal (x) coordinate (0 to width-1).
+      @param y Vertical(y) coordinate (0 to height-1).
+                      sand grains in the simulation.
+  */
+  void setPixel(dimension_t x, dimension_t y);
+
+  /*!
+      @brief Clear one pixel on the pixel grid (set to 0).
+      @param x Horizontal (x) coordinate (0 to width-1).
+      @param y Vertical (y) coordinate (0 to height-1).
+  */
+  void clearPixel(dimension_t x, dimension_t y);
+
+  /*!
+      @brief Clear the pixel grid contents.
+  */
+  void clear(void);
+
+  /*!
+      @brief  Get value of one pixel on the pixel grid.
+      @param  x Horizontal (x) coordinate (0 to width-1).
+      @param  y Vertical (y) coordinate (0 to height-1).
+      @return true if spot occupied by a grain or obstacle,
+              otherwise false.
+  */
+  bool getPixel(dimension_t x, dimension_t y) const;
+
+  /*!
+      @brief  Position one sand grain on the pixel grid.
+      @param  i Grain index (0 to grains-1).
+      @param  x Horizontal (x) coordinate (0 to width-1).
+      @param  y Vertical (y) coordinate (0 to height-1).
+      @return True on success (grain placed), otherwise false
+              (position already occupied)
+  */
+  bool setPosition(grain_count_t i, dimension_t x, dimension_t y);
+
+  /*!
+      @brief  Get Position of one sand grain on the pixel grid.
+      @param  i Grain index (0 to grains-1).
+      @param  x POINTER to store horizontal (x) coord (0 to width-1).
+      @param  y POINTER to store vertical (y) coord (0 to height-1).
+  */
+  void getPosition(grain_count_t i, dimension_t *x, dimension_t *y) const;
+
+  /*!
+      @brief Randomize grain coordinates. This assigns random starting
+             locations to every grain in the simulation, making sure
+             they do not overlap or occupy obstacle pixels placed with
+             the setPixel() function. The pixel grid should first be
+             cleared with the begin() or clear() functions and any
+             obstacles then placed with setPixel(); don't randomize()
+             on an already-active field.
+  */
+  void randomize(void);
+
+  /*!
+      @brief Run one iteration (frame) of the particle simulation.
+      @param ax Accelerometer X input.
+      @param ay Accelerometer Y input.
+      @param az Accelerometer Z input (optional, default is 0).
+  */
+  void iterate(int16_t ax, int16_t ay, int16_t az=0);
+
  private:
   dimension_t   width,      // Width in pixels
                 height,     // Height in pixels
