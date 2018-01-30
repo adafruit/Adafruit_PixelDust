@@ -51,9 +51,14 @@ typedef uint16_t grain_count_t; ///< Number of grains
 // Velocity type is same on any architecture -- must allow up to +/- 256
 typedef int16_t  velocity_t;    ///< Velocity type
 
-typedef struct {     // An array of these structures is allocated in
-  position_t  x,  y; // the begin() function, one per grain.  8 bytes
-  velocity_t vx, vy; // each on AVR, 12 bytes elsewhere.
+/*!
+    @brief Per-grain structure holding position and velocity.
+    An array of these structures is allocated in the begin() function,
+    one per grain.  8 bytes each on AVR, 12 bytes elsewhere.
+*/
+typedef struct {
+  position_t  x,  y; ///< Position in 'sand space'
+  velocity_t vx, vy; ///< Velocity (-255 to +255) in 'sand space'
 } Grain;
 
 /*!
