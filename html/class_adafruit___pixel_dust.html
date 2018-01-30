@@ -84,32 +84,32 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a64aa45eba57bd35b9544ecec4c7dd91a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a64aa45eba57bd35b9544ecec4c7dd91a">begin</a> (void)</td></tr>
 <tr class="memdesc:a64aa45eba57bd35b9544ecec4c7dd91a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates additional memory required by the <a class="el" href="class_adafruit___pixel_dust.html" title="Particle simulation class for &quot;LED sand.&quot; This handles the &quot;physics engine&quot; part of a sand/rain simul...">Adafruit_PixelDust</a> object before placing elements or calling <a class="el" href="class_adafruit___pixel_dust.html#a4e97f805bd28cc5f25c65267ec93dcf5" title="Run one iteration (frame) of the particle simulation. ">iterate()</a>.  <a href="#a64aa45eba57bd35b9544ecec4c7dd91a">More...</a><br /></td></tr>
 <tr class="separator:a64aa45eba57bd35b9544ecec4c7dd91a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51cf5dc085ac1488ce21cbac0d641f12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a51cf5dc085ac1488ce21cbac0d641f12">setPosition</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#abf0948fa8991657f6ad8601f1ea5fd62">grain_count_t</a> i, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> y)</td></tr>
-<tr class="memdesc:a51cf5dc085ac1488ce21cbac0d641f12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position one sand grain on the pixel grid.  <a href="#a51cf5dc085ac1488ce21cbac0d641f12">More...</a><br /></td></tr>
-<tr class="separator:a51cf5dc085ac1488ce21cbac0d641f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a600aa5fcc22d2a48a2627cf9ae13270b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a600aa5fcc22d2a48a2627cf9ae13270b">getPixel</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> y) const</td></tr>
-<tr class="memdesc:a600aa5fcc22d2a48a2627cf9ae13270b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get value of one pixel on the pixel grid.  <a href="#a600aa5fcc22d2a48a2627cf9ae13270b">More...</a><br /></td></tr>
-<tr class="separator:a600aa5fcc22d2a48a2627cf9ae13270b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a9ae8545328c55176400b1e25213de2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a7a9ae8545328c55176400b1e25213de2">setPixel</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> y)</td></tr>
 <tr class="memdesc:a7a9ae8545328c55176400b1e25213de2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets state of one pixel on the pixel grid. This can be used for drawing obstacles for sand to fall around. Call this function BEFORE placing any sand grains with the place() or <a class="el" href="class_adafruit___pixel_dust.html#ae41df4a1f39762f2a27bd2b99af50071" title="Randomize grain coordinates. This assigns random starting locations to every grain in the simulation...">randomize()</a> functions. Setting a pixel does NOT place a sand grain there, only marks that location as an obstacle.  <a href="#a7a9ae8545328c55176400b1e25213de2">More...</a><br /></td></tr>
 <tr class="separator:a7a9ae8545328c55176400b1e25213de2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6aa32baff87fafca21c1f59fec594130"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a6aa32baff87fafca21c1f59fec594130">clearPixel</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> y)</td></tr>
 <tr class="memdesc:a6aa32baff87fafca21c1f59fec594130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear one pixel on the pixel grid (set to 0).  <a href="#a6aa32baff87fafca21c1f59fec594130">More...</a><br /></td></tr>
 <tr class="separator:a6aa32baff87fafca21c1f59fec594130"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae41df4a1f39762f2a27bd2b99af50071"><td class="memItemLeft" align="right" valign="top"><a id="ae41df4a1f39762f2a27bd2b99af50071"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#ae41df4a1f39762f2a27bd2b99af50071">randomize</a> (void)</td></tr>
-<tr class="memdesc:ae41df4a1f39762f2a27bd2b99af50071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Randomize grain coordinates. This assigns random starting locations to every grain in the simulation, making sure they do not overlap or occupy obstacle pixels placed with the <a class="el" href="class_adafruit___pixel_dust.html#a7a9ae8545328c55176400b1e25213de2" title="Sets state of one pixel on the pixel grid. This can be used for drawing obstacles for sand to fall ar...">setPixel()</a> function. The pixel grid should first be cleared with the <a class="el" href="class_adafruit___pixel_dust.html#a64aa45eba57bd35b9544ecec4c7dd91a" title="Allocates additional memory required by the Adafruit_PixelDust object before placing elements or call...">begin()</a> or <a class="el" href="class_adafruit___pixel_dust.html#a2c3f90c01fccd21c92aefb8ce30f0339" title="Clear the pixel grid contents. ">clear()</a> functions and any obstacles then placed with <a class="el" href="class_adafruit___pixel_dust.html#a7a9ae8545328c55176400b1e25213de2" title="Sets state of one pixel on the pixel grid. This can be used for drawing obstacles for sand to fall ar...">setPixel()</a>; don't <a class="el" href="class_adafruit___pixel_dust.html#ae41df4a1f39762f2a27bd2b99af50071" title="Randomize grain coordinates. This assigns random starting locations to every grain in the simulation...">randomize()</a> on an already-active field. <br /></td></tr>
-<tr class="separator:ae41df4a1f39762f2a27bd2b99af50071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a594eda44958c2832fc1b0334fb700e8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a594eda44958c2832fc1b0334fb700e8b">getPosition</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#abf0948fa8991657f6ad8601f1ea5fd62">grain_count_t</a> i, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> *x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> *y) const</td></tr>
-<tr class="memdesc:a594eda44958c2832fc1b0334fb700e8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Position of one sand grain on the pixel grid.  <a href="#a594eda44958c2832fc1b0334fb700e8b">More...</a><br /></td></tr>
-<tr class="separator:a594eda44958c2832fc1b0334fb700e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e97f805bd28cc5f25c65267ec93dcf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a4e97f805bd28cc5f25c65267ec93dcf5">iterate</a> (int16_t ax, int16_t ay, int16_t az=0)</td></tr>
-<tr class="memdesc:a4e97f805bd28cc5f25c65267ec93dcf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run one iteration (frame) of the particle simulation.  <a href="#a4e97f805bd28cc5f25c65267ec93dcf5">More...</a><br /></td></tr>
-<tr class="separator:a4e97f805bd28cc5f25c65267ec93dcf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c3f90c01fccd21c92aefb8ce30f0339"><td class="memItemLeft" align="right" valign="top"><a id="a2c3f90c01fccd21c92aefb8ce30f0339"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a2c3f90c01fccd21c92aefb8ce30f0339">clear</a> (void)</td></tr>
 <tr class="memdesc:a2c3f90c01fccd21c92aefb8ce30f0339"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the pixel grid contents. <br /></td></tr>
 <tr class="separator:a2c3f90c01fccd21c92aefb8ce30f0339"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a600aa5fcc22d2a48a2627cf9ae13270b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a600aa5fcc22d2a48a2627cf9ae13270b">getPixel</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> y) const</td></tr>
+<tr class="memdesc:a600aa5fcc22d2a48a2627cf9ae13270b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get value of one pixel on the pixel grid.  <a href="#a600aa5fcc22d2a48a2627cf9ae13270b">More...</a><br /></td></tr>
+<tr class="separator:a600aa5fcc22d2a48a2627cf9ae13270b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51cf5dc085ac1488ce21cbac0d641f12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a51cf5dc085ac1488ce21cbac0d641f12">setPosition</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#abf0948fa8991657f6ad8601f1ea5fd62">grain_count_t</a> i, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> y)</td></tr>
+<tr class="memdesc:a51cf5dc085ac1488ce21cbac0d641f12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position one sand grain on the pixel grid.  <a href="#a51cf5dc085ac1488ce21cbac0d641f12">More...</a><br /></td></tr>
+<tr class="separator:a51cf5dc085ac1488ce21cbac0d641f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a594eda44958c2832fc1b0334fb700e8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a594eda44958c2832fc1b0334fb700e8b">getPosition</a> (<a class="el" href="_adafruit___pixel_dust_8h.html#abf0948fa8991657f6ad8601f1ea5fd62">grain_count_t</a> i, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> *x, <a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a> *y) const</td></tr>
+<tr class="memdesc:a594eda44958c2832fc1b0334fb700e8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Position of one sand grain on the pixel grid.  <a href="#a594eda44958c2832fc1b0334fb700e8b">More...</a><br /></td></tr>
+<tr class="separator:a594eda44958c2832fc1b0334fb700e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae41df4a1f39762f2a27bd2b99af50071"><td class="memItemLeft" align="right" valign="top"><a id="ae41df4a1f39762f2a27bd2b99af50071"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#ae41df4a1f39762f2a27bd2b99af50071">randomize</a> (void)</td></tr>
+<tr class="memdesc:ae41df4a1f39762f2a27bd2b99af50071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Randomize grain coordinates. This assigns random starting locations to every grain in the simulation, making sure they do not overlap or occupy obstacle pixels placed with the <a class="el" href="class_adafruit___pixel_dust.html#a7a9ae8545328c55176400b1e25213de2" title="Sets state of one pixel on the pixel grid. This can be used for drawing obstacles for sand to fall ar...">setPixel()</a> function. The pixel grid should first be cleared with the <a class="el" href="class_adafruit___pixel_dust.html#a64aa45eba57bd35b9544ecec4c7dd91a" title="Allocates additional memory required by the Adafruit_PixelDust object before placing elements or call...">begin()</a> or <a class="el" href="class_adafruit___pixel_dust.html#a2c3f90c01fccd21c92aefb8ce30f0339" title="Clear the pixel grid contents. ">clear()</a> functions and any obstacles then placed with <a class="el" href="class_adafruit___pixel_dust.html#a7a9ae8545328c55176400b1e25213de2" title="Sets state of one pixel on the pixel grid. This can be used for drawing obstacles for sand to fall ar...">setPixel()</a>; don't <a class="el" href="class_adafruit___pixel_dust.html#ae41df4a1f39762f2a27bd2b99af50071" title="Randomize grain coordinates. This assigns random starting locations to every grain in the simulation...">randomize()</a> on an already-active field. <br /></td></tr>
+<tr class="separator:ae41df4a1f39762f2a27bd2b99af50071"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e97f805bd28cc5f25c65267ec93dcf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html#a4e97f805bd28cc5f25c65267ec93dcf5">iterate</a> (int16_t ax, int16_t ay, int16_t az=0)</td></tr>
+<tr class="memdesc:a4e97f805bd28cc5f25c65267ec93dcf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run one iteration (frame) of the particle simulation.  <a href="#a4e97f805bd28cc5f25c65267ec93dcf5">More...</a><br /></td></tr>
+<tr class="separator:a4e97f805bd28cc5f25c65267ec93dcf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Particle simulation class for "LED sand." This handles the "physics engine" part of a sand/rain simulation. It does not actually render anything itself and needs to work in conjunction with a display library to handle graphics. The term "physics" is used loosely here...it's a relatively crude algorithm that's appealing to the eye but takes many shortcuts with collision detection, etc. </p>
@@ -194,89 +194,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a51cf5dc085ac1488ce21cbac0d641f12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51cf5dc085ac1488ce21cbac0d641f12">&#9670;&nbsp;</a></span>setPosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_PixelDust::setPosition </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#abf0948fa8991657f6ad8601f1ea5fd62">grain_count_t</a>&#160;</td>
-          <td class="paramname"><em>i</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Position one sand grain on the pixel grid. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">i</td><td>Grain index (0 to grains-1). </td></tr>
-    <tr><td class="paramname">x</td><td>Horizontal (x) coordinate (0 to width-1). </td></tr>
-    <tr><td class="paramname">y</td><td>Vertical (y) coordinate (0 to height-1). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success (grain placed), otherwise false (position already occupied) </dd></dl>
-
-</div>
-</div>
-<a id="a600aa5fcc22d2a48a2627cf9ae13270b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a600aa5fcc22d2a48a2627cf9ae13270b">&#9670;&nbsp;</a></span>getPixel()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_PixelDust::getPixel </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get value of one pixel on the pixel grid. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">x</td><td>Horizontal (x) coordinate (0 to width-1). </td></tr>
-    <tr><td class="paramname">y</td><td>Vertical (y) coordinate (0 to height-1). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if spot occupied by a grain or obstacle, otherwise false. </dd></dl>
-
-</div>
-</div>
 <a id="a7a9ae8545328c55176400b1e25213de2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a9ae8545328c55176400b1e25213de2">&#9670;&nbsp;</a></span>setPixel()</h2>
 
@@ -348,6 +265,89 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a600aa5fcc22d2a48a2627cf9ae13270b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a600aa5fcc22d2a48a2627cf9ae13270b">&#9670;&nbsp;</a></span>getPixel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Adafruit_PixelDust::getPixel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get value of one pixel on the pixel grid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Horizontal (x) coordinate (0 to width-1). </td></tr>
+    <tr><td class="paramname">y</td><td>Vertical (y) coordinate (0 to height-1). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if spot occupied by a grain or obstacle, otherwise false. </dd></dl>
+
+</div>
+</div>
+<a id="a51cf5dc085ac1488ce21cbac0d641f12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51cf5dc085ac1488ce21cbac0d641f12">&#9670;&nbsp;</a></span>setPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Adafruit_PixelDust::setPosition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#abf0948fa8991657f6ad8601f1ea5fd62">grain_count_t</a>&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="_adafruit___pixel_dust_8h.html#aaaa3ebb2689ba11839afaec456f41966">dimension_t</a>&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Position one sand grain on the pixel grid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Grain index (0 to grains-1). </td></tr>
+    <tr><td class="paramname">x</td><td>Horizontal (x) coordinate (0 to width-1). </td></tr>
+    <tr><td class="paramname">y</td><td>Vertical (y) coordinate (0 to height-1). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success (grain placed), otherwise false (position already occupied) </dd></dl>
 
 </div>
 </div>
