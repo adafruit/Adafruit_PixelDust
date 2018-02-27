@@ -14,18 +14,23 @@
 #include "lis3dh.h"
 #include <signal.h>
 
-#define N_FLAKES 900 ///< Number of snowflakes
+#define N_FLAKES 900 ///< Number of snowflakes on 64x64 matrix
 
-struct RGBLedMatrix *matrix = NULL;
+struct RGBLedMatrix *matrix  = NULL;
 Adafruit_LIS3DH      lis3dh;
 volatile bool        running = true;
+int                  nFlakes = N_FLAKES; // Runtime flake count (adapts to res)
 
-// Signal handler catches ctrl-C so matrix is properly de-initialized.
+// Signal handler allows matrix to be properly deinitialized.
+int sig[] = { SIGHUP,SIGINT,SIGQUIT,SIGABRT,SIGKILL,SIGBUS,SIGSEGV,SIGTERM };
+#define N_SIGNALS (int)(sizeof sig / sizeof sig[0])
+
 void irqHandler(int dummy) {
 	if(matrix) {
 		led_matrix_delete(matrix);
 		matrix = NULL;
 	}
+	for(int i=0; i<N_SIGNALS; i++) signal(sig[i], NULL);
 	running = false;
 }
 
@@ -36,7 +41,7 @@ int main(int argc, char **argv) {
 	Adafruit_PixelDust        *snow = NULL;
 	dimension_t                x, y;
 
-	signal(SIGINT, irqHandler); // Do this ASAP!
+	for(i=0; i<N_SIGNALS; i++) signal(sig[i], irqHandler); // ASAP!
 
 	// Initialize LED matrix defaults
 	memset(&options, 0, sizeof(options));
@@ -54,7 +59,10 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "Size: %dx%d. Hardware gpio mapping: %s\n",
 	  width, height, options.hardware_mapping);
 
-	snow = new Adafruit_PixelDust(width, height, N_FLAKES, 1, 64, true);
+	if(width  < 64) nFlakes /= 2; // Adjust snow count
+	if(height < 64) nFlakes /= 2; // for smaller matrices
+
+	snow = new Adafruit_PixelDust(width, height, nFlakes, 1, 64, true);
 	if(!snow->begin()) {
 		puts("PixelDust init failed");
 		return 2;
@@ -68,9 +76,7 @@ int main(int argc, char **argv) {
 	snow->randomize(); // Initialize random snowflake positions
 
 	while(running) {
-		// Read accelerometer...
 		lis3dh.accelRead(&xx, &yy, &zz);
-
 		// Run one frame of the simulation.  Axis flip here
 		// depends how the accelerometer is mounted relative
 		// to the LED matrix.
@@ -78,7 +84,7 @@ int main(int argc, char **argv) {
 
 		// Erase canvas and draw new snowflake positions
 		led_canvas_clear(canvas);
-		for(i=0; i<N_FLAKES; i++) {
+		for(i=0; i<nFlakes; i++) {
 			snow->getPosition(i, &x, &y);
 			led_canvas_set_pixel(canvas,
 			  x, y, 255, 255, 255);

@@ -7,6 +7,7 @@
  * REQUIRES rpi-rgb-led-matrix LIBRARY!
  * I2C MUST BE ENABLED using raspi-config!
  *
+ * This demo DOES NOT YET ADAPT automatically to 32x32 matrix!
  * Parts of this are currently hardcoded for a 64x64 matrix.
  *
  */
@@ -20,11 +21,12 @@
 
 #include "logo.h" // This contains the obstacle bitmaps
 
-#define N_GRAINS (8*8*8) ///< Number of grains of sand
+#define N_GRAINS (8*8*8) ///< Number of grains of sand on 64x64 matrix
 
 struct RGBLedMatrix *matrix = NULL;
 Adafruit_LIS3DH      lis3dh;
 volatile bool        running = true;
+int                  nGrains = N_GRAINS; // Runtime grain count (adapts to res)
 
 uint8_t colors[][3] = { // Sand grain colors, 8 groups...
 	  0,  0,  0,   // Black
@@ -40,12 +42,16 @@ uint8_t colors[][3] = { // Sand grain colors, 8 groups...
 #define BG_GREEN 20
 #define BG_BLUE  80
 
-// Signal handler catches ctrl-C so matrix is properly de-initialized.
+// Signal handler allows matrix to be properly deinitialized.
+int sig[] = { SIGHUP,SIGINT,SIGQUIT,SIGABRT,SIGKILL,SIGBUS,SIGSEGV,SIGTERM };
+#define N_SIGNALS (int)(sizeof sig / sizeof sig[0])
+
 void irqHandler(int dummy) {
 	if(matrix) {
 		led_matrix_delete(matrix);
 		matrix = NULL;
 	}
+	for(int i=0; i<N_SIGNALS; i++) signal(sig[i], NULL);
 	running = false;
 }
 
@@ -56,7 +62,7 @@ int main(int argc, char **argv) {
 	Adafruit_PixelDust        *sand = NULL;
 	dimension_t                x, y;
 
-	signal(SIGINT, irqHandler); // Do this ASAP!
+	for(i=0; i<N_SIGNALS; i++) signal(sig[i], irqHandler); // ASAP!
 
 	// Initialize LED matrix defaults
 	memset(&options, 0, sizeof(options));
@@ -83,7 +89,7 @@ int main(int argc, char **argv) {
 	// is set 'false' so the grains are not sorted each frame.
 	// This is because the grains have specific colors by index
 	// (sorting would mess that up).
-	sand = new Adafruit_PixelDust(width, height, N_GRAINS, 1, 64, false);
+	sand = new Adafruit_PixelDust(width, height, nGrains, 1, 64, false);
 	if(!sand->begin()) {
 		puts("PixelDust init failed");
 		return 3;
@@ -144,7 +150,7 @@ int main(int argc, char **argv) {
 		}
 
 		// Draw new sand atop canvas
-		for(i=0; i<N_GRAINS; i++) {
+		for(i=0; i<nGrains; i++) {
 			sand->getPosition(i, &x, &y);
 			int n = i / 64; // Color index
 			led_canvas_set_pixel(canvas,
