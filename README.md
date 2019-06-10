@@ -1,4 +1,4 @@
-# Adafruit_PixelDust Library [![Build Status](https://travis-ci.org/adafruit/Adafruit_PixelDust.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit_PixelDust)
+# Adafruit_PixelDust Library [![Build Status](https://travis-ci.com/adafruit/Adafruit_PixelDust.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_PixelDust)
 
 Particle simulation for "LED sand" (or dust, or snow or rain or whatever).
 
