@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
 	if(width  < 64) nGrains /= 2; // Adjust sand count
 	if(height < 64) nGrains /= 2; // for smaller matrices
 
-	if(lis3dh.begin()) {
+	if(!lis3dh.begin()) {
 		puts("LIS3DH init failed");
 		return 2;
 	}

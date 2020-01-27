@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 		return 2;
 	}
 
-	if(lis3dh.begin()) {
+	if(!lis3dh.begin()) {
 		puts("LIS3DH init failed");
 		return 3;
 	}

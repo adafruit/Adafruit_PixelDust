@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "Size: %dx%d. Hardware gpio mapping: %s\n",
 	  width, height, options.hardware_mapping);
 
-	if(lis3dh.begin()) {
+	if(!lis3dh.begin()) {
 		puts("LIS3DH init failed");
 		return 2;
 	}
