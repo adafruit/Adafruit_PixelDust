@@ -9,17 +9,17 @@
 #ifndef _LIS3DH_H_
 #define _LIS3DH_H_
 
-#include <stdint.h>
-#include <unistd.h>
 #include <fcntl.h>
-#include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
+#include <stdint.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 #define LIS3DH_DEFAULT_ADDRESS 0x18
 
 // Return codes for the begin() function:
-#define LIS3DH_OK            0 ///< Success!
-#define LIS3DH_ERR_I2C_OPEN  1 ///< I2C open() failed
+#define LIS3DH_OK 0            ///< Success!
+#define LIS3DH_ERR_I2C_OPEN 1  ///< I2C open() failed
 #define LIS3DH_ERR_I2C_SLAVE 2 ///< I2C ioctl() slave select failed
 
 // These enums don't see much use (yet?).  They're carried over
@@ -33,9 +33,9 @@
 */
 typedef enum {
   LIS3DH_RANGE_16_G = 0b11, ///< +/- 16g
-  LIS3DH_RANGE_8_G  = 0b10, ///< +/- 8g
-  LIS3DH_RANGE_4_G  = 0b01, ///< +/- 4g
-  LIS3DH_RANGE_2_G  = 0b00  ///< +/- 2g (default value)
+  LIS3DH_RANGE_8_G = 0b10,  ///< +/- 8g
+  LIS3DH_RANGE_4_G = 0b01,  ///< +/- 4g
+  LIS3DH_RANGE_2_G = 0b00   ///< +/- 2g (default value)
 } lis3dh_range_t;
 
 /*!
@@ -53,16 +53,16 @@ typedef enum {
     and just leaves it there.
 */
 typedef enum {
-  LIS3DH_DATARATE_400_HZ         = 0b0111, ///< 400 Hz
-  LIS3DH_DATARATE_200_HZ         = 0b0110, ///< 200 Hz
-  LIS3DH_DATARATE_100_HZ         = 0b0101, ///< 100 Hz
-  LIS3DH_DATARATE_50_HZ          = 0b0100, ///<  50 Hz
-  LIS3DH_DATARATE_25_HZ          = 0b0011, ///<  25 Hz
-  LIS3DH_DATARATE_10_HZ          = 0b0010, ///<  10 Hz
-  LIS3DH_DATARATE_1_HZ           = 0b0001, ///<   1 Hz
-  LIS3DH_DATARATE_POWERDOWN      = 0,      ///< Power-down sleep state
+  LIS3DH_DATARATE_400_HZ = 0b0111,         ///< 400 Hz
+  LIS3DH_DATARATE_200_HZ = 0b0110,         ///< 200 Hz
+  LIS3DH_DATARATE_100_HZ = 0b0101,         ///< 100 Hz
+  LIS3DH_DATARATE_50_HZ = 0b0100,          ///<  50 Hz
+  LIS3DH_DATARATE_25_HZ = 0b0011,          ///<  25 Hz
+  LIS3DH_DATARATE_10_HZ = 0b0010,          ///<  10 Hz
+  LIS3DH_DATARATE_1_HZ = 0b0001,           ///<   1 Hz
+  LIS3DH_DATARATE_POWERDOWN = 0,           ///< Power-down sleep state
   LIS3DH_DATARATE_LOWPOWER_1K6HZ = 0b1000, ///< Low-power state 1
-  LIS3DH_DATARATE_LOWPOWER_5KHZ  = 0b1001, ///< Low-power state 2
+  LIS3DH_DATARATE_LOWPOWER_5KHZ = 0b1001,  ///< Low-power state 2
 } lis3dh_dataRate_t;
 
 /*!
@@ -71,7 +71,7 @@ typedef enum {
     functions needed for Adafruit_PixelDust to work.
 */
 class Adafruit_LIS3DH {
- public:
+public:
   /*!
       @brief Constructor -- allocates the basic Adafruit_LIS3DH object,
              this should be followed with a call to begin() to initiate
@@ -101,9 +101,10 @@ class Adafruit_LIS3DH {
       @brief Closes I2C communication with accelerometer.
   */
   void end(void);
- private:
-  int           i2c_fd; // I2C file descriptor
-  const void    writeRegister8(uint8_t reg, uint8_t value);
+
+private:
+  int i2c_fd; // I2C file descriptor
+  const void writeRegister8(uint8_t reg, uint8_t value);
   const uint8_t readRegister8(uint8_t reg);
 };
 

@@ -1,4 +1,4 @@
-# Adafruit_PixelDust Library [![Build Status](https://travis-ci.com/adafruit/Adafruit_PixelDust.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_PixelDust)
+# Adafruit_PixelDust Library [![Build Status](https://github.com/adafruit/Adafruit_PixelDust/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_PixelDust/actions)[![Documentation](https://github.com/adafruit/ci-arduino/blob/master/assets/doxygen_badge.svg)](http://adafruit.github.io/Adafruit_PixelDust/html/index.html)
 
 Particle simulation for "LED sand" (or dust, or snow or rain or whatever).
 
