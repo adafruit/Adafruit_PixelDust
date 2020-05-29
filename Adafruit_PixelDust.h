@@ -18,14 +18,14 @@
 #define _ADAFRUIT_PIXELDUST_H_
 
 #ifdef ARDUINO
- #include <Arduino.h>
+#include <Arduino.h>
 #else
- #include <stdlib.h>
- #include <stdint.h>
- #include <string.h>
- #include <math.h>
- /*! Remap Arduino-style random() to stdlib-style. */
- #define random(X) (random() % X)
+#include <math.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+/*! Remap Arduino-style random() to stdlib-style. */
+#define random(X) (random() % X)
 #endif
 
 // The internal representation of sand grains places them in an integer
@@ -38,18 +38,18 @@
 // For better performance and RAM utilization on AVR microcontrollers,
 // display is limited to maximum 127x127 pixels and 255 grains of sand.
 // You can try overriding either or both here, RAM permitting.
-typedef uint8_t dimension_t;    ///< Pixel dimensions
-typedef int16_t position_t;     ///< 'Sand space' coords (256X pixel space)
-typedef uint8_t grain_count_t;  ///< Number of grains
+typedef uint8_t dimension_t;   ///< Pixel dimensions
+typedef int16_t position_t;    ///< 'Sand space' coords (256X pixel space)
+typedef uint8_t grain_count_t; ///< Number of grains
 #else
 // Anything non-AVR is presumed more capable, maybe a Cortex M0 or other
 // 32-bit device.  These go up to 32767x32767 pixels and 65535 grains.
 typedef uint16_t dimension_t;   ///< Pixel dimensions
-typedef int32_t  position_t;    ///< 'Sand space' coords (256X pixel space)
+typedef int32_t position_t;     ///< 'Sand space' coords (256X pixel space)
 typedef uint16_t grain_count_t; ///< Number of grains
 #endif
 // Velocity type is same on any architecture -- must allow up to +/- 256
-typedef int16_t  velocity_t;    ///< Velocity type
+typedef int16_t velocity_t; ///< Velocity type
 
 /*!
     @brief Per-grain structure holding position and velocity.
@@ -57,8 +57,8 @@ typedef int16_t  velocity_t;    ///< Velocity type
     one per grain.  8 bytes each on AVR, 12 bytes elsewhere.
 */
 typedef struct {
-  position_t  x; ///< Horizontal position in 'sand space'
-  position_t  y; ///< Vertical position in 'sand space'
+  position_t x;  ///< Horizontal position in 'sand space'
+  position_t y;  ///< Vertical position in 'sand space'
   velocity_t vx; ///< Horizontal velocity (-255 to +255) in 'sand space'
   velocity_t vy; ///< Vertical velocity (-255 to +255) in 'sand space'
 } Grain;
@@ -73,8 +73,7 @@ typedef struct {
     detection, etc.
 */
 class Adafruit_PixelDust {
- public:
-
+public:
   /*!
       @brief Constructor -- allocates the basic Adafruit_PixelDust object,
              this should be followed with a call to begin() to allocate
@@ -98,7 +97,7 @@ class Adafruit_PixelDust {
                   grains by index (because they're constantly reordering).
   */
   Adafruit_PixelDust(dimension_t w, dimension_t h, grain_count_t n, uint8_t s,
-    uint8_t e=128, bool sort=false);
+                     uint8_t e = 128, bool sort = false);
 
   /*!
       @brief Destructor -- deallocates memory associated with the
@@ -183,21 +182,20 @@ class Adafruit_PixelDust {
       @param ay Accelerometer Y input.
       @param az Accelerometer Z input (optional, default is 0).
   */
-  void iterate(int16_t ax, int16_t ay, int16_t az=0);
+  void iterate(int16_t ax, int16_t ay, int16_t az = 0);
 
- private:
-  dimension_t   width,      // Width in pixels
-                height,     // Height in pixels
-                w8;         // Bitmap scanline bytes ((width + 7) / 8)
-  position_t    xMax,       // Max X coordinate in grain space
-                yMax;       // Max Y coordinate in grain space
-  grain_count_t n_grains;   // Number of sand grains
-  uint8_t       scale,      // Accelerometer input scaling = scale/256
-                elasticity, // Grain elasticity (bounce) = elasticity/256
-               *bitmap;     // 2-bit-per-pixel bitmap (width padded to byte)
-  Grain        *grain;      // One per grain, alloc'd in begin()
-  bool          sort;       // If true, sort bottom-to-top when iterating
+private:
+  dimension_t width,      // Width in pixels
+      height,             // Height in pixels
+      w8;                 // Bitmap scanline bytes ((width + 7) / 8)
+  position_t xMax,        // Max X coordinate in grain space
+      yMax;               // Max Y coordinate in grain space
+  grain_count_t n_grains; // Number of sand grains
+  uint8_t scale,          // Accelerometer input scaling = scale/256
+      elasticity,         // Grain elasticity (bounce) = elasticity/256
+      *bitmap;            // 2-bit-per-pixel bitmap (width padded to byte)
+  Grain *grain;           // One per grain, alloc'd in begin()
+  bool sort;              // If true, sort bottom-to-top when iterating
 };
 
 #endif // _ADAFRUIT_PIXELDUST_H_
-
