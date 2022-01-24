@@ -61,7 +61,8 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">Adafruit_PixelDust.h File Reference</div>  </div>
 </div><!--header-->
@@ -77,6 +78,15 @@ $(function() {
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_grain.html">Grain</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-grain structure holding position and velocity. An array of these structures is allocated in the begin() function, one per grain. 8 bytes each on AVR, 12 bytes elsewhere.  <a href="struct_grain.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_edge.html">Edge</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Each rectangular plane has 4 of these structures, indicating the connecting plane(s) off each of four sides, and the corresponding edge there.  <a href="struct_edge.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_plane.html">Plane</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-plane structure holding size and topology. Each PixelDust simulation is comprised of one or more planes. These structures are provided by user code. Additional data is computed on startup and resides in a <a class="el" href="struct_plane_derived.html" title="Per-plane structure with additional data that&#39;s calculated by the library, no need for user to specif...">PlaneDerived</a> struct.  <a href="struct_plane.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_plane_derived.html">PlaneDerived</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-plane structure with additional data that's calculated by the library, no need for user to specify. Original user data is kept in the 'core' element.  <a href="struct_plane_derived.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___pixel_dust.html">Adafruit_PixelDust</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Particle simulation class for "LED sand." This handles the "physics engine" part of a sand/rain simulation. It does not actually render anything itself and needs to work in conjunction with a display library to handle graphics. The term "physics" is used loosely here...it's a relatively crude algorithm that's appealing to the eye but takes many shortcuts with collision detection, etc.  <a href="class_adafruit___pixel_dust.html#details">More...</a><br /></td></tr>
@@ -105,6 +115,19 @@ typedef uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 typedef int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_adafruit___pixel_dust_8h.html#ab75bf7d8aec93f998fce9ad0997fa6af">velocity_t</a></td></tr>
 <tr class="memdesc:ab75bf7d8aec93f998fce9ad0997fa6af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Velocity type. <br /></td></tr>
 <tr class="separator:ab75bf7d8aec93f998fce9ad0997fa6af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a224b9163917ac32fc95a60d8c1eec3aa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_adafruit___pixel_dust_8h.html#a224b9163917ac32fc95a60d8c1eec3aa">Direction</a> { <br />
+&#160;&#160;<b>EDGE_LEFT</b> = 0, 
+<b>EDGE_TOP</b>, 
+<b>EDGE_RIGHT</b>, 
+<b>EDGE_BOTTOM</b>, 
+<br />
+&#160;&#160;<b>EDGE_NONE</b>
+<br />
+ }</td></tr>
+<tr class="separator:a224b9163917ac32fc95a60d8c1eec3aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Header file to accompany <a class="el" href="_adafruit___pixel_dust_8cpp.html">Adafruit_PixelDust.cpp</a> &ndash; particle simulation for "LED sand" (or dust, or snow or rain or whatever).</p>
@@ -128,6 +151,22 @@ typedef int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
       </table>
 </div><div class="memdoc">
 <p>Remap Arduino-style <a class="el" href="_adafruit___pixel_dust_8h.html#a45af06dba24115b8a72bbcb5ce3297ca">random()</a> to stdlib-style. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a224b9163917ac32fc95a60d8c1eec3aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a224b9163917ac32fc95a60d8c1eec3aa">&#9670;&nbsp;</a></span>Direction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_adafruit___pixel_dust_8h.html#a224b9163917ac32fc95a60d8c1eec3aa">Direction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The four edges of a rectangular plane within its native coordinate system orientation. </p>
 
 </div>
 </div>

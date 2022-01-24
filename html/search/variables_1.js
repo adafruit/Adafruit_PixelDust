@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x',['x',['../struct_grain.html#add7cb2cdf24fe31735525efb281f0d67',1,'Grain']]]
+  ['core',['core',['../struct_plane_derived.html#ab7d31157195f0f20b8c97277b2efd2f9',1,'PlaneDerived']]]
 ];

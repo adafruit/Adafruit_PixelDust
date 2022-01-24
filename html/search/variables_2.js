@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y',['y',['../struct_grain.html#a54b908ac4b0b310640ca06cc543e29a4',1,'Grain']]]
+  ['elasticity',['elasticity',['../class_adafruit___pixel_dust.html#a081bfd00cd6a9e290b14b1c85cd3f971',1,'Adafruit_PixelDust']]]
 ];
