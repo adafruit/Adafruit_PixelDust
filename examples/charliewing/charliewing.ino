@@ -84,7 +84,7 @@ void setup(void) {
   uint8_t i, j, bytes;
 
   if(!sand.begin())            err(1000); // Slow blink = malloc error
-  if(!accel.begin(ACCEL_ADDR)) err(250);  // Fast bink = I2C error
+  if(!accel.begin(ACCEL_ADDR)) err(250);  // Fast blink = I2C error
 
   accel.setRange(LIS3DH_RANGE_4_G); // Select accelerometer +/- 4G range
 
