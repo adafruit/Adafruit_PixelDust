@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['setpixel',['setPixel',['../class_adafruit___pixel_dust.html#a57a67f7340a872e2b2b0449a062e00cf',1,'Adafruit_PixelDust']]],
-  ['setposition',['setPosition',['../class_adafruit___pixel_dust.html#a6e493be1966f1aad4d2b475edca357a9',1,'Adafruit_PixelDust']]]
+  ['setpixel',['setPixel',['../class_adafruit___pixel_dust.html#a7a9ae8545328c55176400b1e25213de2',1,'Adafruit_PixelDust']]],
+  ['setposition',['setPosition',['../class_adafruit___pixel_dust.html#a51cf5dc085ac1488ce21cbac0d641f12',1,'Adafruit_PixelDust']]]
 ];

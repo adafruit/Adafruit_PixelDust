@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['bitmap',['bitmap',['../struct_plane_derived.html#ad6e2f53b5e5909ff15612d969ee1fb32',1,'PlaneDerived']]],
-  ['bitmaps',['bitmaps',['../class_adafruit___pixel_dust.html#afdb08f2365b8648da317a96ec42ca649',1,'Adafruit_PixelDust']]]
+  ['vx',['vx',['../struct_grain.html#a3bfe37de9841ff9fb76f1819842033a0',1,'Grain']]],
+  ['vy',['vy',['../struct_grain.html#a40d9c104ae84d53f16a3042b2f317c60',1,'Grain']]]
 ];
