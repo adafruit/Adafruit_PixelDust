@@ -8,10 +8,11 @@ RGB_LIBRARY=$(RGB_LIBDIR)/lib$(RGB_LIBRARY_NAME).a
 # Relative path to the Adafruit_PixelDust library source:
 PIXELDUST_PATH=..
 
-CXXFLAGS=-Wall -Ofast -fomit-frame-pointer -funroll-loops -s -I$(RGB_INCDIR) -I$(PIXELDUST_PATH)
+#CXXFLAGS=-Wall -Ofast -fomit-frame-pointer -funroll-loops -s -I$(RGB_INCDIR) -I$(PIXELDUST_PATH)
+CXXFLAGS=-Wall -s -I$(RGB_INCDIR) -I$(PIXELDUST_PATH)
 LDFLAGS=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 LIBS=Adafruit_PixelDust.o lis3dh.o $(RGB_LIBRARY)
-EXECS=demo1-snow demo2-hourglass demo3-logo
+EXECS=demo1-snow demo2-hourglass demo3-logo cube
 
 all: $(EXECS)
 
@@ -32,6 +33,10 @@ demo2-hourglass: demo2-hourglass.cpp $(LIBS)
 	strip $@
 
 demo3-logo: demo3-logo.cpp logo.h $(LIBS)
+	$(CXX) $(CXXFLAGS) $< $(LDFLAGS) $(LIBS) -o $@
+	strip $@
+
+cube: cube.cpp $(LIBS)
 	$(CXX) $(CXXFLAGS) $< $(LDFLAGS) $(LIBS) -o $@
 	strip $@
 
