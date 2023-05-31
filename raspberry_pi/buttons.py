@@ -33,7 +33,7 @@ def launch():
     global PROCESS
     if PROCESS is not None:
         PROCESS.terminate()
-	while PROCESS.poll() is not None:
+        while PROCESS.poll() is not None:
             continue     # Wait for process to terminate
         time.sleep(0.25) # No, really, wait (seemingly necessary kludge)
     PROCESS = subprocess.Popen(["./" + PROGRAMS[MODE]] + FLAGS)
