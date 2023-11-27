@@ -2,3 +2,7 @@
 Doxyfile*
 doxygen_sqlite3.db
 html
+raspberry_pi/*.o
+raspberry_pi/demo1-snow
+raspberry_pi/demo2-hourglass
+raspberry_pi/demo3-logo
