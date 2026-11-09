@@ -30,10 +30,10 @@
 
 Adafruit_PixelDust::Adafruit_PixelDust(dimension_t w, dimension_t h,
                                        grain_count_t n, uint8_t s, uint8_t e,
-                                       bool sort)
+                                       bool sort, uint16_t damping)
     : width(w), height(h), w8((w + 7) / 8), xMax(w * 256 - 1),
       yMax(h * 256 - 1), n_grains(n), scale(s), elasticity(e), bitmap(NULL),
-      grain(NULL), sort(sort) {}
+      grain(NULL), sort(sort), damping(damping), rngState(0) {}
 
 Adafruit_PixelDust::~Adafruit_PixelDust(void) {
   if (bitmap) {
@@ -60,6 +60,8 @@ bool Adafruit_PixelDust::begin(void) {
 
 bool Adafruit_PixelDust::setPosition(grain_count_t i, dimension_t x,
                                      dimension_t y) {
+  if (x >= width || y >= height)
+    return false; // Out of bounds
   if (getPixel(x, y))
     return false; // Position already occupied
   setPixel(x, y);
@@ -74,11 +76,55 @@ void Adafruit_PixelDust::getPosition(grain_count_t i, dimension_t *x,
   *y = grain[i].y / 256;
 }
 
+void Adafruit_PixelDust::getPositionFixed(grain_count_t i, position_t *x,
+                                          position_t *y) const {
+  *x = grain[i].x;
+  *y = grain[i].y;
+}
+
+void Adafruit_PixelDust::getVelocity(grain_count_t i, velocity_t *vx,
+                                     velocity_t *vy) const {
+  *vx = grain[i].vx;
+  *vy = grain[i].vy;
+}
+
+void Adafruit_PixelDust::reset(void) {
+  if (bitmap)
+    memset(bitmap, 0, w8 * height);
+  if (grain)
+    memset(grain, 0, n_grains * sizeof(Grain));
+}
+
+void Adafruit_PixelDust::setSeed(uint32_t seed) {
+  rngState = seed ? seed : 1;
+}
+
+void Adafruit_PixelDust::useSystemRandom(void) { rngState = 0; }
+
+void Adafruit_PixelDust::setDamping(uint16_t value) {
+  damping = (value > 256) ? 256 : value;
+}
+
+// Return a random 32-bit value from either the platform random() or the
+// internal xorshift generator (enabled by setSeed()).
+uint32_t Adafruit_PixelDust::nextRandom(void) {
+  if (!rngState)
+    return (uint32_t)random(0x7FFFFFFF);
+  uint32_t x = rngState;
+  x ^= x << 13;
+  x ^= x >> 17;
+  x ^= x << 5;
+  rngState = x;
+  return x;
+}
+
 // Fill grain structures with random positions, making sure no two are
 // in the same location.
 void Adafruit_PixelDust::randomize(void) {
+  if (!width || !height)
+    return;
   for (grain_count_t i = 0; i < n_grains; i++) {
-    while (!setPosition(i, random(width), random(height)))
+    while (!setPosition(i, nextRandom() % width, nextRandom() % height))
       ;
   }
 }
@@ -131,7 +177,10 @@ void Adafruit_PixelDust::clear(void) {
     memset(bitmap, 0, w8 * height);
 }
 
-#define BOUNCE(n) n = ((-n) * elasticity / 256) ///< 1-axis elastic bounce
+/// 1-axis elastic bounce. The int32_t cast avoids signed overflow on AVR,
+/// where int is only 16 bits and -256 * 255 does not fit.
+#define BOUNCE(n)                                                              \
+  n = (velocity_t)((-(int32_t)(n) * (int32_t)elasticity) / 256)
 
 // Comparison functions for qsort().  Rather than using true position along
 // acceleration vector (which would be computationally expensive), an 8-way
@@ -201,8 +250,13 @@ void Adafruit_PixelDust::iterate(int16_t ax, int16_t ay, int16_t az) {
   int32_t v2; // Velocity squared
   float v;    // Absolute velocity
   for (i = 0; i < n_grains; i++) {
-    grain[i].vx += ax + random(az2);
-    grain[i].vy += ay + random(az2);
+    grain[i].vx += ax + (int16_t)(nextRandom() % (uint32_t)az2);
+    grain[i].vy += ay + (int16_t)(nextRandom() % (uint32_t)az2);
+    // Optional damping: 256 = no change, lower = heavier/more settled.
+    if (damping < 256) {
+      grain[i].vx = (velocity_t)(((int32_t)grain[i].vx * damping) >> 8);
+      grain[i].vy = (velocity_t)(((int32_t)grain[i].vy * damping) >> 8);
+    }
     // Terminal velocity (in any direction) is 256 units -- equal to
     // 1 pixel -- which keeps moving grains from passing through each other
     // and other such mayhem.  Though it takes some extra math, velocity is

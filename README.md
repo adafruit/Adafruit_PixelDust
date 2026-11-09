@@ -248,6 +248,54 @@ The sort parameter must be set to false in the library constructor when using th
 
 Of course, all of the examples above are one way of using your own image. Feel free to explore other ways to define the structures and write the code to interpret those structures.
 
+## Smoother rendering, heavier sand, faster random ##
+
+### Sub-pixel positions and velocities ###
+
+`getPosition()` returns whole pixels, but the simulation runs at 1/256 pixel
+resolution internally. Two accessors expose that detail for smooth rendering:
+
+```cpp
+position_t fx, fy;   // 8.8 fixed point: pixel = fx >> 8, fraction = fx & 0xFF
+velocity_t vx, vy;   // 1/256 pixel per frame
+sand->getPositionFixed(i, &fx, &fy);
+sand->getVelocity(i, &vx, &vy);
+```
+
+Splatting a moving grain across its neighbouring pixels with bilinear weights
+removes the pixel-to-pixel stepping without changing the physics.
+
+### Damping ###
+
+A little velocity damping makes the sand settle instead of bouncing, and
+removes idle shimmer:
+
+```cpp
+Adafruit_PixelDust sand(width, height, grains, 1, 64, false, 248); // 256 = none
+// or at runtime:
+sand.setDamping(248);
+```
+
+### ESP32: avoid random() ###
+
+On ESP32, Arduino's `random()` uses `esp_random()` and can cost **~22 µs per
+call**. `iterate()` calls it twice per grain per frame, so 512 grains spent
+about **23 ms per frame** in the RNG alone. Enable the internal xorshift PRNG
+instead:
+
+```cpp
+sand->setSeed(1);   // deterministic and fast; call useSystemRandom() to undo
+```
+
+With `setSeed()`, the same 512-grain frame drops to ~1.4 ms on an ESP32-S3 at
+240 MHz. The generator is deterministic, which is also handy for testing.
+
+### Restarting an animation ###
+
+`clear()` only clears the collision bitmap; grains keep their old velocities.
+Use `reset()` instead, which clears the grid and zeroes every grain's position
+and velocity before you place them again.
+
 ## More Information ##
 
 Additional information about the Pixel Dust library can be found in the [header file](https://github.com/adafruit/Adafruit_PixelDust/blob/master/Adafruit_PixelDust.h) which has detailed information about usage.
